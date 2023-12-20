@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/providers/google_map_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/providers/google_map_provider.dart';
+import 'package:gout/utils/themes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,7 @@ class _GoogleMapUIViewState extends State<GoogleMapUIView> {
                   Container(),
                   GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(51.507896, -0.128006),
+                      target: LatLng(44.8781761, 18.8075959),
                       zoom: 13,
                     ),
                     mapType: MapType.normal,

@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/setting_list_data.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/models/setting_list_data.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/remove_focuse.dart';
 
 class CountryScreen extends StatefulWidget {
   @override
@@ -23,6 +25,7 @@ class _CountryScreenState extends State<CountryScreen> {
     countryList = SettingsListData().getCountryListFromJson(json.decode(
         await DefaultAssetBundle.of(context)
             .loadString("assets/json/countryList.json")));
+    print(countryList);
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {});
   }
@@ -41,7 +44,7 @@ class _CountryScreenState extends State<CountryScreen> {
             children: <Widget>[
               CommonAppbarView(
                 iconData: Icons.arrow_back,
-                titleText: "Country",
+                titleText: "Locations",
                 onBackClick: () {
                   Navigator.pop(context);
                 },
@@ -64,8 +67,18 @@ class _CountryScreenState extends State<CountryScreen> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
+                              UpdateLocationDTO data = UpdateLocationDTO(location: countryList[index].subTxt.toString());
+                              updateUser(data);
                               Navigator.pop(
                                   context, "${countryList[index].titleTxt}");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                        "Updated Location",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      backgroundColor:
+                                          AppTheme.backgroundColor));
                             },
                             child: Column(
                               children: <Widget>[

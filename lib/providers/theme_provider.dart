@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/shared_preferences_keys.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/motel_app.dart';
+import 'package:gout/utils/shared_preferences_keys.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/motel_app.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeProvider({required ThemeData state}) : super();

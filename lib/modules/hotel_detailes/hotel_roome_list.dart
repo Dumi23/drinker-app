@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
+import 'package:gout/utils/localfiles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_card.dart';
 
 class HotelRoomeList extends StatefulWidget {
   @override

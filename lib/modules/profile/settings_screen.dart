@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/setting_list_data.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/helper.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/setting_list_data.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/helper.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_card.dart';
+import 'package:gout/widgets/remove_focuse.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
+  final User me;
+
+  const SettingsScreen({Key? key, required this.me}) : super(key: key);
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> with Helper {
   List<SettingsListData> settingsList = SettingsListData.settingsList;
-  var country = 'Australia';
-  var currency = '\$ AUD';
   int selectedradioTile = 0;
   List<String> data = ["English", "French", "Arabic", "Japanese"];
 
@@ -54,22 +57,13 @@ class _SettingsScreenState extends State<SettingsScreen> with Helper {
                         onTap: () {
                           if (index == 1) {
                             // MyApp.restartApp(context);
-                          } else if (index == 6) {
-                            NavigationServices(context)
-                                .gotoCurrencyScreen()
-                                .then((value) {
-                              if (value is String && value != "")
-                                setState(() {
-                                  currency = value;
-                                });
-                            });
                           } else if (index == 5) {
                             NavigationServices(context)
                                 .gotoCountryScreen()
                                 .then((value) {
                               if (value is String && value != "") {
                                 setState(() {
-                                  country = value;
+                                  widget.me.location = value;
                                 });
                               }
                             });
@@ -79,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Helper {
                             _getColorPopUI();
                           } else if (index == 4) {
                             _getLanguageUI();
-                          } else if (index == 10) {
+                          } else if (index == 6) {
                             _gotoSplashScreen();
                           }
                         },
@@ -94,8 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Helper {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Text(
-                                        AppLocalizations(context)
-                                            .of(settingsList[index].titleTxt),
+                                        settingsList[index].titleTxt,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16),
@@ -105,26 +98,19 @@ class _SettingsScreenState extends State<SettingsScreen> with Helper {
                                   index == 5
                                       ? Padding(
                                           padding: const EdgeInsets.all(16),
-                                          child: getTextUi(country))
-                                      : index == 6
-                                          ? Padding(
+                                          child: getTextUi(widget.me.location))
+                                      : index == 1
+                                          ? _themeUI()
+                                          : Padding(
                                               padding: const EdgeInsets.all(16),
-                                              child: getTextUi(currency),
-                                              //   child:
+                                              child: Container(
+                                                child: Icon(
+                                                    settingsList[index]
+                                                        .iconData,
+                                                    color: AppTheme
+                                                        .secondaryTextColor),
+                                              ),
                                             )
-                                          : index == 1
-                                              ? _themeUI()
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(16),
-                                                  child: Container(
-                                                    child: Icon(
-                                                        settingsList[index]
-                                                            .iconData,
-                                                        color: AppTheme
-                                                            .secondaryTextColor),
-                                                  ),
-                                                )
                                 ],
                               ),
                             ),
@@ -520,6 +506,13 @@ class _SettingsScreenState extends State<SettingsScreen> with Helper {
       isYesOrNoPopup: true,
     );
     if (isOk) {
+      Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+      prefs.then((value) {
+        setState(() {
+          value.setBool('loggedIn', false);
+          value.setString('token', '');
+        });
+      });
       NavigationServices(context).gotoSplashScreen();
     }
   }

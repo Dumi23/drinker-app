@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/hotel_list_view_page.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
+import 'package:gout/modules/explore/hotel_list_view_page.dart';
+import 'package:gout/routes/route_names.dart';
 import '../../models/hotel_list_data.dart';
 
-class FavoritesListView extends StatefulWidget {
+/*class FavoritesListView extends StatefulWidget {
   final AnimationController animationController;
 
   const FavoritesListView({Key? key, required this.animationController})
@@ -36,12 +36,12 @@ class _FavoritesListViewState extends State<FavoritesListView> {
                   curve: Curves.fastOutSlowIn)));
           widget.animationController.forward();
           //Favorites hotel data list and UI View
-          return HotelListViewPage(
+          return PlaceListView(
             callback: () {
               NavigationServices(context)
                   .gotoRoomBookingScreen(hotelList[index].titleTxt);
             },
-            hotelData: hotelList[index],
+            placeData: hotelList[index],
             animation: animation,
             animationController: widget.animationController,
           );
@@ -50,3 +50,4 @@ class _FavoritesListViewState extends State<FavoritesListView> {
     );
   }
 }
+*/

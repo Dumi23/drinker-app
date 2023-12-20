@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/hotel_list_view_data.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
+import 'package:gout/modules/myTrips/hotel_list_view_data.dart';
+import 'package:gout/routes/route_names.dart';
 import '../../models/hotel_list_data.dart';
 
 class FinishTripView extends StatefulWidget {

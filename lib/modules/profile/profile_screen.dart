@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/bottom_top_move_animation_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/localfiles.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/bottom_top_move_animation_view.dart';
 import 'package:provider/provider.dart';
 import '../../models/setting_list_data.dart';
 
@@ -20,16 +22,30 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<SettingsListData> userSettingsList = SettingsListData.userSettingsList;
-
+  late User me = User(username: "Guest", email: "Guest@mail.com", location: "empty", music: [], type: 0);
+  late String? imageURL = ""; 
   @override
   void initState() {
+    print(userSettingsList.length);
+    fetchMe().then((value) {
+      setState(() {
+        me = value;
+        imageURL = value.image;
+        print(me);
+        if (me.type == 1 && userSettingsList.length < 4) {
+          userSettingsList.add(SettingsListData(
+              titleTxt: "Create a Place",
+              iconData: FontAwesomeIcons.beerMugEmpty));
+        }
+      });
+    });
     widget.animationController.forward();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BottomTopMoveAnimationView(
+  return BottomTopMoveAnimationView(
         animationController: widget.animationController,
         child: Consumer<ThemeProvider>(
           builder: (context, provider, child) => Column(
@@ -39,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding:
                     EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                child: Container(child: appBar()),
+                child: Container(child: appBar(imageURL, me)),
               ),
               Expanded(
                 child: ListView.builder(
@@ -50,15 +66,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return InkWell(
                       onTap: () async {
                         //setting screen view
-                        if (index == 5) {
-                          NavigationServices(context).gotoSettingsScreen();
+                        if (index == 2) {
+                          NavigationServices(context).gotoSettingsScreen(me);
 
                           //   setState(() {});
                         }
                         //help center screen view
 
                         if (index == 3) {
-                          NavigationServices(context).gotoHeplCenterScreen();
+                          NavigationServices(context).goToCreatePlaceScreen();
                         }
                         //Chage password  screen view
 
@@ -82,9 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
-                                      AppLocalizations(context).of(
-                                        userSettingsList[index].titleTxt,
-                                      ),
+                                      userSettingsList[index].titleTxt,
                                       style: TextStyles(context)
                                           .getRegularStyle()
                                           .copyWith(
@@ -122,10 +136,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ));
   }
 
-  Widget appBar() {
+  Widget appBar(imageURL, User me) {
+    if (imageURL == null){
+      imageURL = "https://www.mtsolar.us/wp-content/uploads/2020/04/avatar-placeholder.png";
+    } else{
+      imageURL = "https://5cw4rvtc-8000.euw.devtunnels.ms${imageURL}";
+    }
     return InkWell(
       onTap: () {
-        NavigationServices(context).gotoEditProfile();
+        NavigationServices(context).gotoEditProfile(me);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    AppLocalizations(context).of("raaj_text"),
+                    me.username,
                     style: new TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -164,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 70,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                child: Image.asset(Localfiles.userImage),
+                child: Image.network(imageURL),
               ),
             ),
           )

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/popular_filter_list.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/filter_screen/slider_view.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/popular_filter_list.dart';
+import 'package:gout/modules/hotel_booking/filter_screen/slider_view.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_button.dart';
 import 'range_slider_view.dart';
 
 class FiltersScreen extends StatefulWidget {

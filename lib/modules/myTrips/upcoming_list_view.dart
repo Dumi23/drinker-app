@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/hotel_list_view.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/modules/myTrips/hotel_list_view.dart';
+import 'package:gout/routes/route_names.dart';
 import '../../models/hotel_list_data.dart';
 
 class UpcomingListView extends StatefulWidget {
   final AnimationController animationController;
+  final PaginateEventFeed events;
 
-  const UpcomingListView({Key? key, required this.animationController})
+  const UpcomingListView({Key? key, required this.animationController, required this.events})
       : super(key: key);
   @override
   _UpcomingListViewState createState() => _UpcomingListViewState();

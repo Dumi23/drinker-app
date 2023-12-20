@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/motel_app.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:gout/motel_app.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

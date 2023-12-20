@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/modules/splash/components/page_pop_view.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/modules/splash/components/page_pop_view.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/localfiles.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -31,19 +32,14 @@ class _HomeExploreSliderViewState extends State<HomeExploreSliderView> {
   @override
   void initState() {
     pageViewModelData.add(PageViewData(
-      titleText: 'cape Town',
+      titleText: 'Novi Sad',
       subText: 'five_star',
       assetsImage: Localfiles.explore_2,
     ));
     pageViewModelData.add(PageViewData(
-      titleText: 'find_best_deals',
+      titleText: 'Brćko',
       subText: 'five_star',
       assetsImage: Localfiles.explore_1,
-    ));
-    pageViewModelData.add(PageViewData(
-      titleText: 'find_best_deals',
-      subText: 'five_star',
-      assetsImage: Localfiles.explore_3,
     ));
 
     sliderTimer = Timer.periodic(Duration(seconds: 4), (timer) {
@@ -51,10 +47,7 @@ class _HomeExploreSliderViewState extends State<HomeExploreSliderView> {
         pageController.animateTo(MediaQuery.of(context).size.width,
             duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
       } else if (currentShowIndex == 1) {
-        pageController.animateTo(MediaQuery.of(context).size.width * 2,
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-      } else if (currentShowIndex == 2) {
-        pageController.animateTo(0,
+        pageController.animateTo(1,
             duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
       }
     });
@@ -89,10 +82,6 @@ class _HomeExploreSliderViewState extends State<HomeExploreSliderView> {
                 imageData: pageViewModelData[1],
                 opValue: widget.opValue,
               ),
-              PagePopup(
-                imageData: pageViewModelData[2],
-                opValue: widget.opValue,
-              ),
             ],
           ),
           Positioned(
@@ -105,7 +94,7 @@ class _HomeExploreSliderViewState extends State<HomeExploreSliderView> {
                 : null,
             child: SmoothPageIndicator(
                 controller: pageController, // PageController
-                count: 3,
+                count: 2,
                 effect: WormEffect(
                     activeDotColor: Theme.of(context).primaryColor,
                     dotColor: Theme.of(context).dividerColor,

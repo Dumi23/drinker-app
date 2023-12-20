@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/utils/validator.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_text_field_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/utils/validator.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_button.dart';
+import 'package:gout/widgets/common_text_field_view.dart';
+import 'package:gout/widgets/remove_focuse.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override

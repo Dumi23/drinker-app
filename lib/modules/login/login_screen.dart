@@ -1,12 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/facebook_twitter_button_view.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/utils/validator.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_text_field_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/modules/login/facebook_twitter_button_view.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/utils/validator.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_button.dart';
+import 'package:gout/widgets/common_text_field_view.dart';
+import 'package:gout/widgets/remove_focuse.dart';
+import 'package:gout/api/api.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -43,12 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 32),
-                      child: FacebookTwitterButtonView(),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        AppLocalizations(context).of("log_with mail"),
+                        "Log in with your credentials",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
@@ -82,8 +86,30 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: EdgeInsets.only(left: 24, right: 24, bottom: 16),
                       buttonText: AppLocalizations(context).of("login"),
                       onTap: () {
-                        if (_allValidation())
-                          NavigationServices(context).gotoTabScreen();
+                        if (_allValidation()) {
+                          LoginDTO data = LoginDTO(
+                              email: _emailController.text.toString(),
+                              password: _passwordController.text.toString());
+                          login(data).then((value) {
+                            setState(() {
+                              if (value == "Welcome. Succesfuly logged in") {
+                                var snackBar = SnackBar(
+                                    content: Text(
+                                      value,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    backgroundColor: AppTheme.backgroundColor);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                NavigationServices(context).gotoTabScreen();
+                              } else {
+                                var snackBar = SnackBar(content: Text(value));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            });
+                          });
+                        }
                       },
                     ),
                   ],
@@ -106,12 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
           InkWell(
             borderRadius: BorderRadius.all(Radius.circular(8)),
             onTap: () {
-              NavigationServices(context).gotoForgotPassword();
+              NavigationServices(context).gotoTabScreen();
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                AppLocalizations(context).of("forgot_your_Password"),
+                "Continue as Guest",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,

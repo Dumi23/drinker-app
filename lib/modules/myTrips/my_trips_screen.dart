@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/favorites_list_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/finish_trip_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/upcoming_list_view.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/bottom_top_move_animation_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/modules/myTrips/favorites_list_view.dart';
+import 'package:gout/modules/myTrips/finish_trip_view.dart';
+import 'package:gout/modules/myTrips/upcoming_list_view.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/bottom_top_move_animation_view.dart';
+import 'package:gout/widgets/common_card.dart';
 import 'package:provider/provider.dart';
 
 class MyTripsScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class MyTripsScreen extends StatefulWidget {
 class _MyTripsScreenState extends State<MyTripsScreen>
     with TickerProviderStateMixin {
   late AnimationController tabAnimationController;
+  late PaginateEventFeed events;
 
   Widget indexView = Container();
   TopBarType topBarType = TopBarType.Upcomming;
@@ -32,10 +34,15 @@ class _MyTripsScreenState extends State<MyTripsScreen>
         AnimationController(duration: Duration(milliseconds: 400), vsync: this);
     indexView = UpcomingListView(
       animationController: tabAnimationController,
+      events: events,
     );
     tabAnimationController..forward();
     widget.animationController.forward();
-
+    fetchEvents().then((value) {
+      setState(() {
+        events = value;
+      });
+    });
     super.initState();
   }
 
@@ -82,6 +89,7 @@ class _MyTripsScreenState extends State<MyTripsScreen>
         if (tabType == TopBarType.Upcomming) {
           setState(() {
             indexView = UpcomingListView(
+              events: events,
               animationController: tabAnimationController,
             );
           });
@@ -91,13 +99,13 @@ class _MyTripsScreenState extends State<MyTripsScreen>
               animationController: tabAnimationController,
             );
           });
-        } else if (tabType == TopBarType.Favorites) {
-          setState(() {
-            indexView = FavoritesListView(
-              animationController: tabAnimationController,
-            );
-          });
-        }
+        } //else if (tabType == TopBarType.Favorites) {
+          //setState(() {
+            //indexView = FavoritesListView(
+              //animationController: tabAnimationController,
+            //);
+          //});
+        //}
       });
     }
   }

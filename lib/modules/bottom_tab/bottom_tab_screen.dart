@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/home_explore_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/myTrips/my_trips_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/profile_screen.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/modules/explore/home_explore_screen.dart';
+import 'package:gout/modules/myTrips/my_trips_screen.dart';
+import 'package:gout/modules/profile/profile_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/modules/bottom_tab/components/tab_button_UI.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/modules/bottom_tab/components/tab_button_UI.dart';
+import 'package:gout/widgets/common_card.dart';
 import 'package:provider/provider.dart';
 
 class BottomTabScreen extends StatefulWidget {

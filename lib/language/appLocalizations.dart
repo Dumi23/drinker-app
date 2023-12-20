@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/common/common.dart' as common;
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/motel_app.dart';
+import 'package:gout/common/common.dart' as common;
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/motel_app.dart';
 import 'package:provider/provider.dart';
 
 class AppLocalizations {

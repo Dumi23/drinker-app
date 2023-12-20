@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/room_data.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
+import 'package:gout/models/room_data.dart';
+import 'package:gout/utils/localfiles.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HotelListData {
+  int id;
   String imagePath;
   String titleTxt;
   String subTxt;
@@ -21,6 +22,7 @@ class HotelListData {
   Offset? screenMapPin; // we used this screen Offset for adding on Map layer
 
   HotelListData({
+    this.id = 0,
     this.imagePath = '',
     this.titleTxt = '',
     this.subTxt = "",
@@ -109,28 +111,14 @@ class HotelListData {
 
   static List<HotelListData> popularList = [
     HotelListData(
-      imagePath: Localfiles.popular_1,
-      titleTxt: 'Paris',
+      imagePath: 'assets/images/brc.jpg',
+      titleTxt: 'Brcko',
+      id: 1
     ),
     HotelListData(
-      imagePath: Localfiles.popular_2,
-      titleTxt: 'Spain',
-    ),
-    HotelListData(
-      imagePath: Localfiles.popular_3,
-      titleTxt: 'Vernazza',
-    ),
-    HotelListData(
-      imagePath: Localfiles.popular_4,
-      titleTxt: 'London',
-    ),
-    HotelListData(
-      imagePath: Localfiles.popular_5,
-      titleTxt: 'Venice',
-    ),
-    HotelListData(
-      imagePath: Localfiles.popular_6,
-      titleTxt: 'Diamond Head',
+      imagePath: 'assets/images/sad.jpg',
+      titleTxt: 'Novi Sad',
+      id: 2
     ),
   ];
 

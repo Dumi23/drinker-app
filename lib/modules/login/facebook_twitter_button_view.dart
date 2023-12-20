@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
+import 'package:gout/widgets/common_button.dart';
 
 class FacebookTwitterButtonView extends StatelessWidget {
   @override

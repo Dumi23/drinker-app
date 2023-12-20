@@ -1,20 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
-import 'package:flutter_hotel_booking_ui/widgets/list_cell_animation_view.dart';
+import 'dart:convert';
 
-class ReviewsView extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_card.dart';
+import 'package:gout/widgets/list_cell_animation_view.dart';
+
+class EventsView extends StatelessWidget {
   final VoidCallback callback;
-  final HotelListData reviewsList;
+  final Event events;
+  final Place eventData;
   final AnimationController animationController;
   final Animation<double> animation;
 
-  const ReviewsView({
+  const EventsView({
     Key? key,
-    required this.reviewsList,
+    required this.events,
+    required this.eventData,
     required this.animationController,
     required this.animation,
     required this.callback,
@@ -44,8 +50,8 @@ class ReviewsView extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         child: AspectRatio(
                           aspectRatio: 1,
-                          child: Image.asset(
-                            reviewsList.imagePath,
+                          child: Image.network(
+                            "https://5cw4rvtc-8000.euw.devtunnels.ms/${events.image}",
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -58,7 +64,7 @@ class ReviewsView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      reviewsList.titleTxt,
+                      events.name,
                       style: TextStyles(context).getBoldStyle().copyWith(
                             fontSize: 14,
                           ),
@@ -75,7 +81,7 @@ class ReviewsView extends StatelessWidget {
                               ),
                         ),
                         Text(
-                          reviewsList.dateTxt,
+                          events.start_time,
                           style: new TextStyles(context)
                               .getDescriptionStyle()
                               .copyWith(
@@ -87,14 +93,6 @@ class ReviewsView extends StatelessWidget {
                     ),
                     Row(
                       children: <Widget>[
-                        Text(
-                          "(${reviewsList.rating})",
-                          style: new TextStyles(context)
-                              .getRegularStyle()
-                              .copyWith(
-                                fontWeight: FontWeight.w100,
-                              ),
-                        ),
                         //   SmoothStarRating(
                         //     allowHalfRating: true,
                         //     starCount: 5,
@@ -112,7 +110,7 @@ class ReviewsView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                reviewsList.subTxt,
+                utf8.decode(events.description.codeUnits),
                 style: TextStyles(context).getDescriptionStyle().copyWith(
                       fontWeight: FontWeight.w100,
                       color: Theme.of(context).disabledColor,
@@ -133,15 +131,19 @@ class ReviewsView extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 8),
                       child: Row(
                         children: <Widget>[
-                          Text(
-                            AppLocalizations(context).of("reply"),
-                            textAlign: TextAlign.left,
-                            style:
-                                TextStyles(context).getRegularStyle().copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                          InkWell(
+                            onTap: () => NavigationServices(context).goToEventDetailsScreen(events, eventData),
+                            child: Text(
+                              "View more",
+                              textAlign: TextAlign.left,
+                              style: TextStyles(context)
+                                  .getRegularStyle()
+                                  .copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                            ),
                           ),
                           SizedBox(
                             height: 38,

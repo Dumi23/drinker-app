@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
+import 'package:gout/models/hotel_list_data.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleMapProvider extends ChangeNotifier {

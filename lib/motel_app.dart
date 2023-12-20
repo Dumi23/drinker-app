@@ -2,15 +2,20 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hotel_booking_ui/common/common.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/modules/splash/introductionScreen.dart';
-import 'package:flutter_hotel_booking_ui/modules/splash/splashScreen.dart';
-import 'package:flutter_hotel_booking_ui/routes/routes.dart';
+import 'package:gout/common/common.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/modules/explore/home_explore_screen.dart';
+import 'package:gout/modules/hotel_booking/hotel_home_screen.dart';
+import 'package:gout/modules/login/login_screen.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/modules/splash/introductionScreen.dart';
+import 'package:gout/modules/splash/splashScreen.dart';
+import 'package:gout/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 BuildContext? applicationcontext;
 
@@ -41,7 +46,7 @@ class _MotelAppState extends State<MotelApp> {
             const Locale('ar'), //Arebic
           ],
           navigatorKey: navigatorKey,
-          title: 'Motel',
+          title: 'GOUT',
           debugShowCheckedModeBanner: false,
           theme: _theme,
           routes: _buildRoutes(),
@@ -105,8 +110,6 @@ class _MotelAppState extends State<MotelApp> {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       RoutesName.Splash: (BuildContext context) => SplashScreen(),
-      RoutesName.IntroductionScreen: (BuildContext context) =>
-          IntroductionScreen(),
     };
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
+import 'package:gout/utils/localfiles.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/widgets/common_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,8 +16,25 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool isLoadText = false;
+  var navigation;
   @override
   void initState() {
+    var sharedPrefs = SharedPreferences.getInstance();
+    sharedPrefs.then((value) {
+      if (value.get('loggedIn') == true) {
+        {NavigationServices(context).gotoTabScreen();}
+      }
+      else {
+        navigation = CommonButton(
+          padding:
+              const EdgeInsets.only(left: 48, right: 48, bottom: 8, top: 8),
+          buttonText: "Log in",
+          onTap: () {
+            NavigationServices(context).gotoLoginScreen();
+          },
+        );
+      }
+    });
     WidgetsBinding.instance!.addPostFrameCallback((_) =>
         _loadAppLocalizations()); // call after first frame receiver so we have context
     super.initState();
@@ -46,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   : null,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Image.asset(Localfiles.introduction, fit: BoxFit.cover),
+              child: Image.asset(Localfiles.party, fit: BoxFit.cover),
             ),
             Column(
               children: <Widget>[
@@ -73,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.0),
                       ),
-                      child: Image.asset(Localfiles.appIcon),
+                      child: Image.asset(Localfiles.logo),
                     ),
                   ),
                 ),
@@ -81,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 16,
                 ),
                 Text(
-                  "Motel",
+                  "GOUT",
                   textAlign: TextAlign.left,
                   style: TextStyles(context).getBoldStyle().copyWith(
                         fontSize: 24,
@@ -94,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   opacity: isLoadText ? 1.0 : 0.0,
                   duration: Duration(milliseconds: 420),
                   child: Text(
-                    AppLocalizations(context).of("best_hotel_deals"),
+                    "Plan your perfect night out",
                     textAlign: TextAlign.left,
                     style: TextStyles(context).getRegularStyle().copyWith(),
                   ),
@@ -104,17 +122,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: SizedBox(),
                 ),
                 AnimatedOpacity(
-                  opacity: isLoadText ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 680),
-                  child: CommonButton(
-                    padding: const EdgeInsets.only(
-                        left: 48, right: 48, bottom: 8, top: 8),
-                    buttonText: AppLocalizations(context).of("get_started"),
-                    onTap: () {
-                      NavigationServices(context).gotoIntroductionScreen();
-                    },
-                  ),
-                ),
+                    opacity: isLoadText ? 1.0 : 0.0,
+                    duration: Duration(milliseconds: 680),
+                    child: navigation),
                 AnimatedOpacity(
                   opacity: isLoadText ? 1.0 : 0.0,
                   duration: Duration(milliseconds: 1200),
@@ -122,12 +132,18 @@ class _SplashScreenState extends State<SplashScreen> {
                     padding: EdgeInsets.only(
                         bottom: 24.0 + MediaQuery.of(context).padding.bottom,
                         top: 16),
-                    child: Text(
-                      AppLocalizations(context).of("already_have_account"),
-                      textAlign: TextAlign.left,
-                      style: TextStyles(context).getDescriptionStyle().copyWith(
-                            color: AppTheme.whiteColor,
-                          ),
+                    child: InkWell(
+                      onTap: () {
+                        NavigationServices(context).gotoSignScreen();
+                      },
+                      child: Text(
+                        "Don't have an account, Sign Up",
+                        textAlign: TextAlign.left,
+                        style:
+                            TextStyles(context).getDescriptionStyle().copyWith(
+                                  color: AppTheme.whiteColor,
+                                ),
+                      ),
                     ),
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/remove_focuse.dart';
 import '../../models/setting_list_data.dart';
 
 class CurrencyScreen extends StatefulWidget {

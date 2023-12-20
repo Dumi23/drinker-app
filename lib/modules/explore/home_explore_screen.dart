@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/home_explore_slider_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/hotel_list_view_page.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/popular_list_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/title_view.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/bottom_top_move_animation_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_search_bar.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/modules/explore/home_explore_slider_view.dart';
+import 'package:gout/modules/explore/hotel_list_view_page.dart';
+import 'package:gout/modules/explore/popular_list_view.dart';
+import 'package:gout/modules/explore/title_view.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/bottom_top_move_animation_view.dart';
+import 'package:gout/widgets/common_button.dart';
+import 'package:gout/widgets/common_card.dart';
+import 'package:gout/widgets/common_search_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:gout/api/api.dart';
 
 class HomeExploreScreen extends StatefulWidget {
   final AnimationController animationController;
-
   const HomeExploreScreen({Key? key, required this.animationController})
       : super(key: key);
   @override
@@ -30,10 +30,18 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
     with TickerProviderStateMixin {
   var hotelList = HotelListData.hotelList;
   late ScrollController controller;
+  PaginatePlaceFeed? feedResult =
+      PaginatePlaceFeed(results: [], count: 0, next: null, previous: null);
+  late Future<PaginatePlaceFeed> feed = fetchFeed();
   late AnimationController _animationController;
   var sliderImageHieght = 0.0;
   @override
   void initState() {
+    feed.then((value) {
+      setState(() {
+        feedResult = value;
+      });
+    });
     _animationController =
         AnimationController(duration: Duration(milliseconds: 0), vsync: this);
     widget.animationController.forward();
@@ -75,8 +83,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
                 controller: controller,
                 itemCount: 4,
                 // padding on top is only for we need spec for sider
-                padding:
-                    EdgeInsets.only(top: sliderImageHieght + 32, bottom: 16),
+                padding: EdgeInsets.only(top: 110, bottom: 16),
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   // some list UI
@@ -90,8 +97,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
                   );
                   if (index == 0) {
                     return TitleView(
-                      titleTxt:
-                          AppLocalizations(context).of("popular_destination"),
+                      titleTxt: "Available Destinations",
                       subTxt: '',
                       animation: animation,
                       animationController: widget.animationController,
@@ -108,7 +114,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
                     );
                   } else if (index == 2) {
                     return TitleView(
-                      titleTxt: AppLocalizations(context).of("best_deal"),
+                      titleTxt: "Locales for you",
                       subTxt: AppLocalizations(context).of("view_all"),
                       animation: animation,
                       isLeftButton: true,
@@ -121,12 +127,6 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
                 },
               ),
             ),
-            // sliderUI with 3 images are moving
-            _sliderUI(),
-
-            // viewHotels Button UI for click event
-            _viewHotelsButton(_animationController),
-
             //just gradient for see the time and battry Icon on "TopBar"
             Positioned(
               top: 0,
@@ -195,7 +195,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
                       padding: const EdgeInsets.only(
                           left: 24, right: 24, top: 8, bottom: 8),
                       child: Text(
-                        AppLocalizations(context).of("view_hotel"),
+                        "View Locales",
                         style: TextStyles(context)
                             .getRegularStyle()
                             .copyWith(color: AppTheme.whiteColor),
@@ -237,31 +237,28 @@ class _HomeExploreScreenState extends State<HomeExploreScreen>
   }
 
   Widget getDealListView(int index) {
+    // ignore: unused_local_variable
     var hotelList = HotelListData.hotelList;
     List<Widget> list = [];
-    hotelList.forEach((f) {
+    feedResult!.results.forEach((f) {
       var animation = Tween(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
           parent: widget.animationController,
           curve: Interval(0, 1.0, curve: Curves.fastOutSlowIn),
         ),
       );
-      list.add(
-        HotelListViewPage(
-          callback: () {
-            NavigationServices(context).gotoHotelDetailes(f);
-          },
-          hotelData: f,
-          animation: animation,
-          animationController: widget.animationController,
-        ),
-      );
+      list.add(PlaceListView(
+        placeData: f,
+        animationController: widget.animationController,
+        animation: animation,
+        callback: () {
+          NavigationServices(context).gotoHotelDetailes(f);
+        },
+      ));
     });
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: Column(
-        children: list,
-      ),
+      child: Column(children: list),
     );
   }
 

@@ -1,23 +1,35 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/utils/localfiles.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/utils/localfiles.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_card.dart';
+import 'package:gout/widgets/remove_focuse.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../models/setting_list_data.dart';
 
 class EditProfile extends StatefulWidget {
+  late User me;
+
+  EditProfile({Key? key, required this.me}) : super(key: key);
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  List<SettingsListData> userInfoList = SettingsListData.userInfoList;
-
   @override
   Widget build(BuildContext context) {
+    var userInfo = userInfoList(widget.me);
+    var imageURL;
+    if (widget.me.image == null){
+      imageURL = "https://www.mtsolar.us/wp-content/uploads/2020/04/avatar-placeholder.png";
+    } else {
+      imageURL = "https://5cw4rvtc-8000.euw.devtunnels.ms${widget.me.image.toString()}";
+    }
     return Container(
       child: Scaffold(
         backgroundColor: AppTheme.scaffoldBackgroundColor,
@@ -40,10 +52,10 @@ class _EditProfileState extends State<EditProfile> {
                 child: ListView.builder(
                   padding: EdgeInsets.only(
                       bottom: 16 + MediaQuery.of(context).padding.bottom),
-                  itemCount: userInfoList.length,
+                  itemCount: userInfo.toList().length,
                   itemBuilder: (context, index) {
                     return index == 0
-                        ? getProfileUI()
+                        ? getProfileUI(imageURL)
                         : InkWell(
                             onTap: () {},
                             child: Column(
@@ -58,8 +70,7 @@ class _EditProfileState extends State<EditProfile> {
                                           padding: const EdgeInsets.only(
                                               left: 16.0, bottom: 16, top: 16),
                                           child: Text(
-                                            AppLocalizations(context).of(
-                                                userInfoList[index].titleTxt),
+                                            userInfo.toList()[index].subTxt,
                                             style: TextStyles(context)
                                                 .getDescriptionStyle()
                                                 .copyWith(
@@ -73,7 +84,7 @@ class _EditProfileState extends State<EditProfile> {
                                             right: 16.0, bottom: 16, top: 16),
                                         child: Container(
                                           child: Text(
-                                            userInfoList[index].subTxt,
+                                            userInfo.toList()[index].titleTxt,
                                             style: TextStyles(context)
                                                 .getRegularStyle()
                                                 .copyWith(
@@ -106,7 +117,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Widget getProfileUI() {
+  Widget getProfileUI(imageUrl) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -135,7 +146,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                    child: Image.asset(Localfiles.userImage),
+                    child: Image.network(imageUrl),
                   ),
                 ),
                 Positioned(
@@ -148,7 +159,11 @@ class _EditProfileState extends State<EditProfile> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.all(Radius.circular(24.0)),
-                        onTap: () {},
+                        onTap: () async {
+                          final source = await ImageSource.gallery;
+                          final pickedImage = await ImagePicker().pickImage(source: source);
+                          updateUserPic(pickedImage!.path);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(

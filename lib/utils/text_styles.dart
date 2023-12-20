@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:gout/utils/themes.dart';
 
 class TextStyles {
   final BuildContext context;

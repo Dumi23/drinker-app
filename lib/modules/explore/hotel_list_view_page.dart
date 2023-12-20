@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/helper.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
-import 'package:flutter_hotel_booking_ui/widgets/list_cell_animation_view.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/helper.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_card.dart';
+import 'package:gout/widgets/list_cell_animation_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class HotelListViewPage extends StatelessWidget {
+Image urlImage(imgurl) {
+  try {
+    print(imgurl);
+    return Image.network(
+      imgurl,
+      fit: BoxFit.fill,
+    );
+  } catch (_) {
+    return Image.network(
+      "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg",
+      fit: BoxFit.fill,
+    );
+  }
+}
+
+class PlaceListView extends StatelessWidget {
   final bool isShowDate;
   final VoidCallback callback;
-  final HotelListData hotelData;
+  final Place placeData;
   final AnimationController animationController;
   final Animation<double> animation;
 
-  const HotelListViewPage(
+  const PlaceListView(
       {Key? key,
-      required this.hotelData,
+      required this.placeData,
       required this.animationController,
       required this.animation,
       required this.callback,
@@ -46,9 +62,15 @@ class HotelListViewPage extends StatelessWidget {
                     children: <Widget>[
                       AspectRatio(
                         aspectRatio: 0.90,
-                        child: Image.asset(
-                          hotelData.imagePath,
-                          fit: BoxFit.cover,
+                        child: Image.network(
+                          "https://5cw4rvtc-8000.euw.devtunnels.ms/${placeData.image}",
+                          fit: BoxFit.fill,
+                          errorBuilder: ((context, error, stackTrace) {
+                            return Image.network(
+                              "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg",
+                              fit: BoxFit.fill,
+                            );
+                          }),
                         ),
                       ),
                       Expanded(
@@ -62,7 +84,7 @@ class HotelListViewPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                hotelData.titleTxt,
+                                placeData.name,
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 style:
@@ -72,7 +94,7 @@ class HotelListViewPage extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                hotelData.subTxt,
+                                placeData.street_name,
                                 style: TextStyles(context)
                                     .getDescriptionStyle()
                                     .copyWith(
@@ -101,7 +123,7 @@ class HotelListViewPage extends StatelessWidget {
                                                     .primaryColor,
                                               ),
                                               Text(
-                                                " ${hotelData.dist.toStringAsFixed(1)} ",
+                                                " ${placeData.type.name} ",
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyles(context)
                                                     .getDescriptionStyle()
@@ -109,63 +131,9 @@ class HotelListViewPage extends StatelessWidget {
                                                       fontSize: 14,
                                                     ),
                                               ),
-                                              Expanded(
-                                                child: Text(
-                                                  AppLocalizations(context)
-                                                      .of("km_to_city"),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyles(context)
-                                                      .getDescriptionStyle()
-                                                      .copyWith(
-                                                        fontSize: 14,
-                                                      ),
-                                                ),
-                                              ),
                                             ],
                                           ),
-                                          Helper.ratingStar(),
                                         ],
-                                      ),
-                                    ),
-                                    FittedBox(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            Text(
-                                              "\$${hotelData.perNight}",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyles(context)
-                                                  .getBoldStyle()
-                                                  .copyWith(fontSize: 22),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: context
-                                                              .read<
-                                                                  ThemeProvider>()
-                                                              .languageType ==
-                                                          LanguageType.ar
-                                                      ? 2.0
-                                                      : 0.0),
-                                              child: Text(
-                                                AppLocalizations(context)
-                                                    .of("per_night"),
-                                                style: TextStyles(context)
-                                                    .getDescriptionStyle()
-                                                    .copyWith(
-                                                      fontSize: 14,
-                                                    ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                       ),
                                     ),
                                   ],

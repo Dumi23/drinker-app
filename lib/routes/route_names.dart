@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/modules/bottom_tab/bottom_tab_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/filter_screen/filters_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/hotel_home_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/hotel_detailes.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/reviews_list_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/room_booking_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_detailes/search_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/change_password.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/forgot_password.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/login_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/sign_up_Screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/country_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/currency_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/edit_profile.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/hepl_center_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/how_do_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/invite_screen.dart';
-import 'package:flutter_hotel_booking_ui/modules/profile/settings_screen.dart';
-import 'package:flutter_hotel_booking_ui/routes/routes.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/modules/hotel_detailes/create_place.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/modules/bottom_tab/bottom_tab_screen.dart';
+import 'package:gout/modules/hotel_booking/filter_screen/filters_screen.dart';
+import 'package:gout/modules/hotel_booking/hotel_home_screen.dart';
+import 'package:gout/modules/hotel_detailes/attendes_list_screen.dart';
+import 'package:gout/modules/hotel_detailes/event_details.dart';
+import 'package:gout/modules/hotel_detailes/hotel_detailes.dart';
+import 'package:gout/modules/hotel_detailes/reviews_list_screen.dart';
+import 'package:gout/modules/hotel_detailes/room_booking_screen.dart';
+import 'package:gout/modules/hotel_detailes/search_screen.dart';
+import 'package:gout/modules/login/change_password.dart';
+import 'package:gout/modules/login/forgot_password.dart';
+import 'package:gout/modules/login/login_screen.dart';
+import 'package:gout/modules/login/sign_up_Screen.dart';
+import 'package:gout/modules/profile/country_screen.dart';
+import 'package:gout/modules/profile/currency_screen.dart';
+import 'package:gout/modules/profile/edit_profile.dart';
+import 'package:gout/modules/profile/hepl_center_screen.dart';
+import 'package:gout/modules/profile/how_do_screen.dart';
+import 'package:gout/modules/profile/invite_screen.dart';
+import 'package:gout/modules/profile/settings_screen.dart';
+import 'package:gout/routes/routes.dart';
 
 class NavigationServices {
   NavigationServices(this.context);
@@ -37,6 +41,11 @@ class NavigationServices {
   void gotoSplashScreen() {
     Navigator.pushNamedAndRemoveUntil(
         context, RoutesName.Splash, (Route<dynamic> route) => false);
+  }
+
+  void gotoHomeScreen() {
+    Navigator.pushNamedAndRemoveUntil(
+        context, RoutesName.Home, (Route<dynamic> route) => false);
   }
 
   void gotoIntroductionScreen() {
@@ -77,22 +86,38 @@ class NavigationServices {
         RoomBookingScreen(hotelName: hotelname));
   }
 
-  Future<dynamic> gotoHotelDetailes(HotelListData hotelData) async {
-    return await _pushMaterialPageRoute(HotelDetailes(
-      hotelData: hotelData,
+  Future<dynamic> gotoHotelDetailes(Place placeData) async {
+    return await _pushMaterialPageRoute(PlaceDetails(
+      placeData: placeData,
     ));
   }
 
-  Future<dynamic> gotoReviewsListScreen() async {
-    return await _pushMaterialPageRoute(ReviewsListScreen());
+  Future<dynamic> goToEventDetailsScreen(
+      Event eventData, Place placeData) async {
+    return await _pushMaterialPageRoute(EventDetails(
+      eventData: eventData,
+      placeData: placeData,
+    ));
   }
 
-  Future<dynamic> gotoEditProfile() async {
-    return await _pushMaterialPageRoute(EditProfile());
+  Future<dynamic> goToAtendeesListScreen(Event eventData) async {
+    return await _pushMaterialPageRoute(AttendesListScreen(
+      eventData: eventData,
+    ));
   }
 
-  Future<dynamic> gotoSettingsScreen() async {
-    return await _pushMaterialPageRoute(SettingsScreen());
+  Future<dynamic> gotoReviewsListScreen(Place placeData) async {
+    return await _pushMaterialPageRoute(EventListScreen(
+      placeData: placeData,
+    ));
+  }
+
+  Future<dynamic> gotoEditProfile(User me) async {
+    return await _pushMaterialPageRoute(EditProfile(me: me));
+  }
+
+  Future<dynamic> gotoSettingsScreen(User me) async {
+    return await _pushMaterialPageRoute(SettingsScreen(me: me));
   }
 
   Future<dynamic> gotoHeplCenterScreen() async {
@@ -119,5 +144,9 @@ class NavigationServices {
 
   Future<dynamic> gotoHowDoScreen() async {
     return await _pushMaterialPageRoute(HowDoScreen());
+  }
+
+  Future<dynamic> goToCreatePlaceScreen() async{
+    return await _pushMaterialPageRoute(CreatePlace());
   }
 }

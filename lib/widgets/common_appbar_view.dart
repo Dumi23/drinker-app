@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
 
 class CommonAppbarView extends StatelessWidget {
   final double? topPadding;

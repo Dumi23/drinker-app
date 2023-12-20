@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/room_data.dart';
-import 'package:flutter_hotel_booking_ui/motel_app.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/enum.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/custom_dialog.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/room_data.dart';
+import 'package:gout/motel_app.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/enum.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/custom_dialog.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 

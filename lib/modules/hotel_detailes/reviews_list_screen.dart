@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
+import 'package:gout/api/api.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
 import '../../models/hotel_list_data.dart';
 import 'review_data_view.dart';
 
-class ReviewsListScreen extends StatefulWidget {
-  @override
+class EventListScreen extends StatefulWidget {
+  final Place placeData;
+
+  const EventListScreen({Key? key, required this.placeData}) : super(key: key);@override
   _ReviewsListScreenState createState() => _ReviewsListScreenState();
 }
 
-class _ReviewsListScreenState extends State<ReviewsListScreen>
+class _ReviewsListScreenState extends State<EventListScreen>
     with TickerProviderStateMixin {
   List<HotelListData> reviewsList = HotelListData.reviewsList;
   late AnimationController animationController;
@@ -37,7 +40,7 @@ class _ReviewsListScreenState extends State<ReviewsListScreen>
             onBackClick: () {
               Navigator.pop(context);
             },
-            titleText: "Review(20)",
+            titleText: "Events ${widget.placeData.events.length}",
           ),
           // animation of Review and feedback data
           Expanded(
@@ -45,9 +48,9 @@ class _ReviewsListScreenState extends State<ReviewsListScreen>
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.only(
                   top: 8, bottom: MediaQuery.of(context).padding.bottom + 8),
-              itemCount: reviewsList.length,
+              itemCount: widget.placeData.events.length,
               itemBuilder: (context, index) {
-                var count = reviewsList.length > 10 ? 10 : reviewsList.length;
+                var count = widget.placeData.events.length > 10 ? 10 : widget.placeData.events.length;
                 var animation = Tween(begin: 0.0, end: 1.0).animate(
                     CurvedAnimation(
                         parent: animationController,
@@ -55,9 +58,10 @@ class _ReviewsListScreenState extends State<ReviewsListScreen>
                             curve: Curves.fastOutSlowIn)));
                 animationController.forward();
                 // page to redirect the feedback and review data
-                return ReviewsView(
+                return EventsView(
                   callback: () {},
-                  reviewsList: reviewsList[index],
+                  eventData: widget.placeData,
+                  events: widget.placeData.events[index],
                   animation: animation,
                   animationController: animationController,
                 );

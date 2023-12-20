@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/models/room_data.dart';
-import 'package:flutter_hotel_booking_ui/providers/theme_provider.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_card.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/models/room_data.dart';
+import 'package:gout/providers/theme_provider.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/widgets/common_button.dart';
+import 'package:gout/widgets/common_card.dart';
 import 'package:provider/provider.dart';
 
 class RoomPopupView extends StatefulWidget {

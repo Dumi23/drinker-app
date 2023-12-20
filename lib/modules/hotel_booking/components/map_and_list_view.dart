@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/models/hotel_list_data.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/components/google_map_ui_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/components/time_date_view.dart';
-import 'package:flutter_hotel_booking_ui/modules/hotel_booking/map_hotel_view.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
+import 'package:gout/models/hotel_list_data.dart';
+import 'package:gout/modules/hotel_booking/components/google_map_ui_view.dart';
+import 'package:gout/modules/hotel_booking/components/time_date_view.dart';
+import 'package:gout/modules/hotel_booking/map_hotel_view.dart';
+import 'package:gout/routes/route_names.dart';
 
 class MapAndListView extends StatelessWidget {
   final List<HotelListData> hotelList;

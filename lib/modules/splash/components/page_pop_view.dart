@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/utils/text_styles.dart';
 
 class PagePopup extends StatelessWidget {
   final PageViewData imageData;
@@ -30,7 +30,7 @@ class PagePopup extends StatelessWidget {
           flex: 1,
           child: Container(
             child: Text(
-              AppLocalizations(context).of(imageData.titleText),
+              imageData.titleText.toString(),
               textAlign: TextAlign.center,
               style: TextStyles(context).getTitleStyle().copyWith(
                     fontSize: 24,
@@ -43,7 +43,7 @@ class PagePopup extends StatelessWidget {
           flex: 1,
           child: Container(
             child: Text(
-              AppLocalizations(context).of(imageData.subText),
+              imageData.subText.toString(),
               textAlign: TextAlign.center,
               style: TextStyles(context).getDescriptionStyle(),
             ),

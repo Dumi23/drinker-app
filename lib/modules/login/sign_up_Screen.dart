@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/utils/text_styles.dart';
-import 'package:flutter_hotel_booking_ui/utils/themes.dart';
-import 'package:flutter_hotel_booking_ui/language/appLocalizations.dart';
-import 'package:flutter_hotel_booking_ui/modules/login/facebook_twitter_button_view.dart';
-import 'package:flutter_hotel_booking_ui/routes/route_names.dart';
-import 'package:flutter_hotel_booking_ui/utils/validator.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_appbar_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_button.dart';
-import 'package:flutter_hotel_booking_ui/widgets/common_text_field_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/remove_focuse.dart';
+import 'package:gout/utils/text_styles.dart';
+import 'package:gout/utils/themes.dart';
+import 'package:gout/language/appLocalizations.dart';
+import 'package:gout/modules/login/facebook_twitter_button_view.dart';
+import 'package:gout/routes/route_names.dart';
+import 'package:gout/utils/validator.dart';
+import 'package:gout/widgets/common_appbar_view.dart';
+import 'package:gout/widgets/common_button.dart';
+import 'package:gout/widgets/common_text_field_view.dart';
+import 'package:gout/widgets/remove_focuse.dart';
+import 'package:gout/api/api.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -16,6 +18,17 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  List userType = [
+    {
+      "type": "OWNER",
+      "id": 1,
+    },
+    {
+      "type": "USER",
+      "id": 0,
+    },
+  ];
+
   String _errorEmail = '';
   TextEditingController _emailController = TextEditingController();
   String _errorPassword = '';
@@ -24,6 +37,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _fnameController = TextEditingController();
   String _errorLName = '';
   TextEditingController _lnameController = TextEditingController();
+  List<Music> musicSlug = [];
+  int type = 0;
+
+  List<String> formMusicSlug(List<Music> music) {
+    List<String> musicSlug = [];
+    music.forEach((e) => musicSlug.add(e.slug));
+    print(musicSlug);
+    return musicSlug;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,40 +65,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 32),
-                        child: FacebookTwitterButtonView(),
-                      ),
-                      Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          AppLocalizations(context).of("log_with mail"),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).disabledColor,
-                          ),
-                        ),
                       ),
                       CommonTextFieldView(
                         controller: _fnameController,
                         errorText: _errorFName,
                         padding: const EdgeInsets.only(
                             bottom: 16, left: 24, right: 24),
-                        titleText: AppLocalizations(context).of("first_name"),
-                        hintText:
-                            AppLocalizations(context).of("enter_first_name"),
-                        keyboardType: TextInputType.name,
-                        onChanged: (String txt) {},
-                      ),
-                      CommonTextFieldView(
-                        controller: _lnameController,
-                        errorText: _errorLName,
-                        padding: const EdgeInsets.only(
-                            bottom: 16, left: 24, right: 24),
-                        titleText: AppLocalizations(context).of("last_name"),
-                        hintText:
-                            AppLocalizations(context).of("enter_last_name"),
+                        titleText: "Username",
+                        hintText: "enter your username",
                         keyboardType: TextInputType.name,
                         onChanged: (String txt) {},
                       ),
@@ -102,13 +99,69 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorText: _errorPassword,
                         controller: _passwordController,
                       ),
+                      SizedBox(
+                          width: 475,
+                          child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: DropdownSearch<Music>.multiSelection(
+                                popupProps: const PopupPropsMultiSelection.menu(
+                                  showSelectedItems: false,
+                                  showSearchBox: true,
+                                ),
+                                asyncItems: (String filter) =>
+                                    fetchMusic(filter),
+                                itemAsString: (Music music) => music.genre,
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                  labelText: "Music",
+                                )),
+                                // ignore: avoid_print
+                                onChanged: (value) {
+                                  setState(() {
+                                    musicSlug = value;
+                                    print(musicSlug);
+                                  });
+                                },
+                              ))),
+                      SizedBox(
+                          width: 475,
+                          child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: DropdownSearch<dynamic>(
+                                popupProps: const PopupPropsMultiSelection.menu(
+                                  showSelectedItems: false,
+                                  showSearchBox: false,
+                                ),
+                                items: userType,
+                                itemAsString: (item) => (item['type']),
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                  labelText: "User Type",
+                                )),
+                                // ignore: avoid_print
+                                onChanged: (value) {
+                                  type = value['id'];
+                                },
+                              ))),
                       CommonButton(
                         padding:
                             EdgeInsets.only(left: 24, right: 24, bottom: 8),
                         buttonText: AppLocalizations(context).of("sign_up"),
                         onTap: () {
-                          if (_allValidation())
-                            NavigationServices(context).gotoTabScreen();
+                          if (_allValidation()) {
+                            print(formMusicSlug(musicSlug));
+                            CreateAccountDTO data = CreateAccountDTO(
+                                email: _emailController.text.toString(),
+                                password: _passwordController.text.toString(),
+                                username: _fnameController.text.toString(),
+                                music_slug: formMusicSlug(musicSlug),
+                                type: type);
+                            createAccount(data).then((value) {
+                              var snackBar = SnackBar(content: Text(value));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            });
+                          }
                         },
                       ),
                       Padding(
@@ -185,17 +238,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     bool isValid = true;
 
     if (_fnameController.text.trim().isEmpty) {
-      _errorFName = AppLocalizations(context).of('first_name_cannot_empty');
+      _errorFName = "Username cannot be empty";
       isValid = false;
     } else {
       _errorFName = '';
-    }
-
-    if (_lnameController.text.trim().isEmpty) {
-      _errorLName = AppLocalizations(context).of('last_name_cannot_empty');
-      isValid = false;
-    } else {
-      _errorLName = '';
     }
 
     if (_emailController.text.trim().isEmpty) {
@@ -211,7 +257,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_passwordController.text.trim().isEmpty) {
       _errorPassword = AppLocalizations(context).of('password_cannot_empty');
       isValid = false;
-    } else if (_passwordController.text.trim().length < 6) {
+    } else if (_passwordController.text.trim().length < 8) {
       _errorPassword = AppLocalizations(context).of('valid_password');
       isValid = false;
     } else {

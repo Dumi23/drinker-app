@@ -1,6 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hotel_booking_ui/modules/explore/category_view.dart';
-import 'package:flutter_hotel_booking_ui/widgets/bottom_top_move_animation_view.dart';
+import 'package:gout/modules/explore/category_view.dart';
+import 'package:gout/widgets/bottom_top_move_animation_view.dart';
 import '../../models/hotel_list_data.dart';
 
 class PopularListView extends StatefulWidget {
@@ -49,30 +50,24 @@ class _PopularListViewState extends State<PopularListView>
             if (!snapshot.hasData) {
               return SizedBox();
             } else {
-              return ListView.builder(
-                padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 24, left: 8),
-                itemCount: popularList.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
+              return CarouselSlider(
+                items: popularList.map((e) {                 
                   var count = popularList.length > 10 ? 10 : popularList.length;
                   var animation = Tween(begin: 0.0, end: 1.0).animate(
                       CurvedAnimation(
                           parent: animationController!,
-                          curve: Interval((1 / count) * index, 1.0,
+                          curve: Interval((1 / count) * 0, 1.0,
                               curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
                   //Population animation photo and text view
                   return CategoryView(
-                    popularList: popularList[index],
+                    popularList: e,
                     animation: animation,
                     animationController: animationController!,
                     callback: () {
-                      widget.callBack(index);
+                      widget.callBack(0);
                     },
-                  );
-                },
-              );
+                  );}).toList(), options: CarouselOptions(autoPlay: true));
             }
           },
         ),

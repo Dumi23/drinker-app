@@ -1,4 +1,4 @@
-package com.example.flutter_hotel_booking_ui
+package com.example.gout
 
 import io.flutter.embedding.android.FlutterActivity
 

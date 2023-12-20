@@ -1,5 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gout/api/api.dart';
+
+List<SettingsListData> userInfoList(User me) {
+  return [
+    SettingsListData(
+      titleTxt: '',
+      subTxt: "",
+    ),
+    SettingsListData(
+      titleTxt: me.username,
+      subTxt: "Username",
+    ),
+    SettingsListData(
+      titleTxt: me.email,
+      subTxt: "Email",
+    ),
+    SettingsListData(
+      titleTxt: me.location,
+      subTxt: "Location",
+    ),
+  ];
+}
 
 class SettingsListData {
   String titleTxt;
@@ -15,46 +37,33 @@ class SettingsListData {
   });
 
   List<SettingsListData> getCountryListFromJson(Map<String, dynamic> json) {
-    List<SettingsListData> countryList = [];
-    if (json['countryList'] != null) {
-      json['countryList'].forEach((v) {
+    var locationList = [{"name": "Brcko", "slug": "KDGbL"}, {"name": "Novi Sad", "slug": "ELMyL"}];
+    List<SettingsListData> locations = [];
+    if (locationList != null) {
+      locationList.forEach((v) {
+        print(locationList);
         SettingsListData data = SettingsListData();
-        data.titleTxt = v["name"];
-        data.subTxt = v["code"];
-        countryList.add(data);
+        data.titleTxt = v["name"]!;
+        data.subTxt = v['slug']!;
+        locations.add(data);
       });
     }
-    return countryList;
+    return locations;
   }
 
   static List<SettingsListData> userSettingsList = [
     SettingsListData(
-      titleTxt: 'change_password',
+      titleTxt: 'Change Password',
       isSelected: false,
       iconData: FontAwesomeIcons.lock,
     ),
     SettingsListData(
-      titleTxt: 'invite_friend',
+      titleTxt: 'Invite a Friend',
       isSelected: false,
       iconData: FontAwesomeIcons.userFriends,
     ),
     SettingsListData(
-      titleTxt: 'credit_coupons',
-      isSelected: false,
-      iconData: FontAwesomeIcons.gift,
-    ),
-    SettingsListData(
-      titleTxt: 'help_center',
-      isSelected: false,
-      iconData: FontAwesomeIcons.infoCircle,
-    ),
-    SettingsListData(
-      titleTxt: 'payment_text',
-      isSelected: false,
-      iconData: FontAwesomeIcons.wallet,
-    ),
-    SettingsListData(
-      titleTxt: 'setting_text',
+      titleTxt: 'Settings',
       isSelected: false,
       iconData: FontAwesomeIcons.cog,
     )
@@ -86,29 +95,9 @@ class SettingsListData {
       iconData: Icons.translate_outlined,
     ),
     SettingsListData(
-      titleTxt: 'Country',
+      titleTxt: 'Location',
       isSelected: false,
       iconData: FontAwesomeIcons.userFriends,
-    ),
-    SettingsListData(
-      titleTxt: 'Currency',
-      isSelected: false,
-      iconData: FontAwesomeIcons.gift,
-    ),
-    SettingsListData(
-      titleTxt: 'Terms of Services',
-      isSelected: false,
-      iconData: Icons.keyboard_arrow_right,
-    ),
-    SettingsListData(
-      titleTxt: 'Privacy Policy',
-      isSelected: false,
-      iconData: Icons.keyboard_arrow_right,
-    ),
-    SettingsListData(
-      titleTxt: 'Give Us Feedbacks',
-      isSelected: false,
-      iconData: Icons.keyboard_arrow_right,
     ),
     SettingsListData(
       titleTxt: 'Log out',
@@ -275,33 +264,6 @@ class SettingsListData {
     SettingsListData(
       titleTxt: "",
       subTxt: "What is the",
-    ),
-  ];
-
-  static List<SettingsListData> userInfoList = [
-    SettingsListData(
-      titleTxt: '',
-      subTxt: "",
-    ),
-    SettingsListData(
-      titleTxt: 'username_text',
-      subTxt: "Amanda Jane",
-    ),
-    SettingsListData(
-      titleTxt: 'mail_text',
-      subTxt: "amanda@gmail.com",
-    ),
-    SettingsListData(
-      titleTxt: 'phone',
-      subTxt: "+65 1122334455",
-    ),
-    SettingsListData(
-      titleTxt: 'date_of_birth',
-      subTxt: "20, Aug, 1990",
-    ),
-    SettingsListData(
-      titleTxt: 'address_text',
-      subTxt: "123 Royal Street, New York",
     ),
   ];
 }
